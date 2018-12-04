@@ -3,11 +3,15 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { ListComponent } from './list/list.component';
+import { ItemListComponent } from './list/item-list/item-list.component';
+import { PositionPipe } from './position.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListComponent
+    ListComponent,
+    ItemListComponent,
+    PositionPipe
   ],
   imports: [
     BrowserModule
