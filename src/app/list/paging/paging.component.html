@@ -1,0 +1,25 @@
+<div id="paging">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col paging-control" id="firstPageButton">
+          <button (click)="changePage('f')">FIRST</button>
+        </div>
+        <div class="col paging-control" id="previousButton">
+          <button (click)="changePage('p')">PREVIOUS</button>
+        </div>
+        <div class="col" id="currentPage">
+          <span>{{currentPage}} of {{totalPages}}</span>
+        </div>
+        <div class="col paging-control" id="nextButton">
+          <button (click)="changePage('n')">NEXT</button>
+        </div>
+        <div class="col paging-control" id="lastPageButton">
+          <button (click)="changePage('l')">LAST</button>
+        </div>
+      </div>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>

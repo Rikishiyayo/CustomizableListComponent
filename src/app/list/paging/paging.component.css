@@ -1,0 +1,11 @@
+#paging .paging-control {
+  user-select: none;
+}
+
+#paging .paging-control button {
+  cursor: pointer;
+}
+/* 
+#paging .paging-control:hover {
+  color: lightseagreen;
+} */

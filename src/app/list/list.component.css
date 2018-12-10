@@ -1,0 +1,3 @@
+div#customizableList {
+    max-width: 1350px; /* overwrite bootstrap max-width setting */
+}
