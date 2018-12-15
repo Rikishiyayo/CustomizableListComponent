@@ -12,12 +12,21 @@ export class FilterComponent implements OnInit, OnDestroy {
   filterFormSubscriptions: Subscription[] = [];
   filterForm: FormGroup;
 
-  positionFilterItem = {
-    title: 'Position',
-    values: ['Goalkeeper', 'Defender', 'Midfielder', 'Forward']
-  };
-  ageFilterItem = {
-    title: 'Age', min: 16, max: 40
+  filter = {
+    filterItems: {
+      position: {
+        type: 'MultiCheckbox',
+        title: 'Position',
+        values: ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'],
+        selectedValues: []
+      },
+      age: {
+        type: 'MultiRange',
+        title: 'Age',
+        min: 16,
+        max: 40
+      }
+    }
   };
 
   constructor(private appService: AppService, private formBuilder: FormBuilder) {
@@ -33,7 +42,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private initMultiCheckboxFilter() {
-    const controls = this.positionFilterItem.values
+    const controls = this.filter.filterItems.position.values
       .map(c => new FormControl(false));
     this.filterForm = this.formBuilder.group({
       position: this.formBuilder.array(controls),
@@ -45,25 +54,25 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this.filterFormSubscriptions
       .push(this.filterForm.get('position').valueChanges.subscribe(val => {
-        console.log(`position: ${val}`);
+        this.applyFilter(this.filterForm);
       }));
   }
 
-  private initRangeFilter() {  }
+  private initRangeFilter() { }
 
-  rangeFilterValueChanged(minValue, maxValue) {
-    console.log(`age: ${minValue} - ${maxValue}`);
-  }
-
-  onSubmit() {
-    console.log(this.filterForm.value.position);
-
-    this.appService.loadFilteredPlayers('');
-    const selectedPositions = this.filterForm.value.position
-      .map((v, i) => v ? this.positionFilterItem.values[i] : null)
+  applyFilter(updatedFilterForm: FormGroup = null) {
+    const filterForm = updatedFilterForm ? updatedFilterForm : this.filterForm;
+    const selectedPositions = filterForm.value.position
+      .map((v, i) => v ? this.filter.filterItems.position.values[i] : null)
       .filter(v => v !== null);
 
-    console.log(selectedPositions);
+    const filterValues = {
+      position: selectedPositions,
+      age: filterForm.value.age
+    };
+
+    console.log(`applying this filter: `, filterValues);
+    this.appService.loadFilteredPlayers(filterValues);
   }
 
   ngOnDestroy(): void {
