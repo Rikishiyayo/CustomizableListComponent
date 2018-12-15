@@ -34,6 +34,7 @@ export class AppService {
     return allPlayers.slice((page - 1) * pageSize, page * pageSize);
   }
 
+  // Event emmiting methods
   async loadPageOfPlayers(page: number) {
     console.log(`AppService - loadPageOfPlayers() invoked, getting ${page}.page
     of players and emitting an event`);
@@ -41,10 +42,14 @@ export class AppService {
     this.loadedPlayersChanged.next(chunkOfPlayers);
   }
 
-  // getPlayersWithAppliedFilter() {
-  //   return this.players.slice(0, 100);
-  // }
+  async loadFilteredPlayers(filter: string) {
+    console.log(`AppService - loadFilteredPlayers() invoked, getting
+    of filtered players and emitting an event`);
+    const chunkOfPlayers = await this.getPageOfPlayers(1);
+    this.loadedPlayersChanged.next(chunkOfPlayers);
+  }
 
+  // private helper methods
   private getAllPlayersPromise(): Promise<Player[]> {
     // tslint:disable-next-line:no-shadowed-variable
     return new Promise((resolve, reject) => {

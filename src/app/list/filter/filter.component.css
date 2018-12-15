@@ -1,0 +1,7 @@
+.list-group-item {
+    padding: .15rem .4rem;
+}
+
+.list-group-item label {
+    cursor: pointer;
+}

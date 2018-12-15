@@ -1,0 +1,43 @@
+<form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <span>Position</span>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let position of filterForm.controls.position.controls; let i = index"
+            class="list-group-item">
+            <label formArrayName="position">
+              <input type="checkbox" [formControlName]="i">
+              {{positionFilterItem.values[i]}}
+            </label>
+          </li>
+        </ul>
+      </div>
+      <div formGroupName="age">
+        <span>Age</span>
+        <div class="form-group row">
+          <div class="col-9">
+            <input #minAge type="range"
+              [min]="ageFilterItem.min"
+              [max]="ageFilterItem.max"
+              formControlName="minAge"
+              class="form-control"
+              (change)="rangeFilterValueChanged(minAge.value, maxAge.value)">
+          </div>
+          <div class="col-3">{{minAge.value}}</div>
+        </div>
+        <div class="form-group row">
+          <div class="col-9">
+            <input #maxAge type="range"
+              [min]="ageFilterItem.min"
+              [max]="ageFilterItem.max"
+              formControlName="maxAge"
+              class="form-control"
+              (change)="rangeFilterValueChanged(minAge.value, maxAge.value)">
+          </div>
+          <div class="col-3">{{maxAge.value}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
