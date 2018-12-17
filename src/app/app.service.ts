@@ -13,6 +13,7 @@ export class AppService {
 
   // Global observables of the component
   loadedPlayersChanged = new Subject<Player[]>();
+  playersFiltered = new Subject<number>();
 
   private players: Array<Player>;
 
@@ -30,18 +31,18 @@ export class AppService {
     return allPlayers.slice();
   }
 
-  async getPageOfPlayers(page: number): Promise<Player[]> {
-    const allPlayers = await this.getAllPlayersPromise();
+  async getPageOfPlayers(page: number, listOfPlayers: Player[] = null): Promise<Player[]> {
+    const allPlayers = listOfPlayers ? listOfPlayers : await this.getAllPlayersPromise();
     return allPlayers.slice((page - 1) * pageSize, page * pageSize);
   }
 
-  async getFilteredPageOfPlayers(page: number, filter: Filter): Promise<Player[]> {
+  async getFilteredListOfPlayers(filter: Filter): Promise<Player[]> {
     const allPlayers = await this.getAllPlayersPromise();
 
     const filteredPlayers = allPlayers.filter((value) =>
       this.meetsFilterCriteria(value, filter));
 
-    return filteredPlayers.slice((page - 1) * pageSize, page * pageSize);
+    return filteredPlayers;
   }
 
   private meetsFilterCriteria(player: Player, filter: Filter): boolean {
@@ -61,8 +62,12 @@ export class AppService {
   async loadFilteredPlayers(filter: Filter) {
     console.log(`AppService - loadFilteredPlayers() invoked, getting
     of filtered players and emitting an event`);
-    const chunkOfPlayers = await this.getFilteredPageOfPlayers(1, filter);
-    this.loadedPlayersChanged.next(chunkOfPlayers);
+
+    const filteredListOfPlayers = await this.getFilteredListOfPlayers(filter);
+    const pageOfFilteredListOfPlayers = await this.getPageOfPlayers(1, filteredListOfPlayers);
+
+    this.loadedPlayersChanged.next(pageOfFilteredListOfPlayers);
+    this.playersFiltered.next(filteredListOfPlayers.length);
   }
 
   // private helper methods

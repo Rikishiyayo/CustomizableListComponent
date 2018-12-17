@@ -4,10 +4,9 @@
       <div class="form-group">
         <span>Position</span>
         <ul class="list-group list-group-flush">
-          <li *ngFor="let position of filterForm.controls.position.controls; let i = index"
-            class="list-group-item">
+          <li *ngFor="let position of filterForm.controls.position.controls; let i = index" class="list-group-item">
             <label formArrayName="position">
-              <input type="checkbox" [formControlName]="i">
+              <input type="checkbox" [formControlName]="i" (change)="applyFilter()">
               {{filter.filterItems.position.values[i]}}
             </label>
           </li>
@@ -17,23 +16,15 @@
         <span>Age</span>
         <div class="form-group row">
           <div class="col-9">
-            <input #minAge type="range"
-              [min]="filter.filterItems.age.min"
-              [max]="filter.filterItems.age.max"
-              formControlName="minAge"
-              class="form-control"
-              (change)="applyFilter()">
+            <input #minAge type="range" [min]="filter.filterItems.age.min" [max]="filter.filterItems.age.max"
+              formControlName="minAge" class="form-control" (change)="applyFilter()">
           </div>
           <div class="col-3">{{minAge.value}}</div>
         </div>
         <div class="form-group row">
           <div class="col-9">
-            <input #maxAge type="range"
-              [min]="filter.filterItems.age.min"
-              [max]="filter.filterItems.age.max"
-              formControlName="maxAge"
-              class="form-control"
-              (change)="applyFilter()">
+            <input #maxAge type="range" [min]="filter.filterItems.age.min" [max]="filter.filterItems.age.max"
+              formControlName="maxAge" class="form-control" (change)="applyFilter()">
           </div>
           <div class="col-3">{{maxAge.value}}</div>
         </div>

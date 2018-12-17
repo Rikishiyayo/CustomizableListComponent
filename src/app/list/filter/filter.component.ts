@@ -37,38 +37,33 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
-    this.initMultiCheckboxFilter();
-    this.initRangeFilter();
-  }
-
-  private initMultiCheckboxFilter() {
     const controls = this.filter.filterItems.position.values
       .map(c => new FormControl(false));
     this.filterForm = this.formBuilder.group({
       position: this.formBuilder.array(controls),
       age: this.formBuilder.group({
-        minAge: [16],
-        maxAge: [40]
+        minAge: [this.filter.filterItems.age.min],
+        maxAge: [this.filter.filterItems.age.max]
       })
     });
-
-    this.filterFormSubscriptions
-      .push(this.filterForm.get('position').valueChanges.subscribe(val => {
-        this.applyFilter(this.filterForm);
-      }));
   }
 
-  private initRangeFilter() { }
-
-  applyFilter(updatedFilterForm: FormGroup = null) {
-    const filterForm = updatedFilterForm ? updatedFilterForm : this.filterForm;
-    const selectedPositions = filterForm.value.position
+  applyFilter() {
+    // select positions that were checked(true value in formArray)
+    let selectedPositions = this.filterForm.value.position
       .map((v, i) => v ? this.filter.filterItems.position.values[i] : null)
       .filter(v => v !== null);
 
+    // if no positions were selected, assign all positions to the variable in order to
+    // not filter by position
+    selectedPositions =
+      (Array.isArray(selectedPositions) && selectedPositions.length)
+      ? selectedPositions
+      : this.filter.filterItems.position.values;
+
     const filterValues = {
       position: selectedPositions,
-      age: filterForm.value.age
+      age: this.filterForm.value.age
     };
 
     console.log(`applying this filter: `, filterValues);

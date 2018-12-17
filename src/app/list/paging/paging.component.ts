@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppService } from 'src/app/app.service';
+import { Subscription } from 'rxjs';
 
 enum PagingControls {
   First = 'f',
@@ -14,8 +15,9 @@ const pageSize = 15;
   templateUrl: './paging.component.html',
   styleUrls: ['./paging.component.css']
 })
-export class PagingComponent implements OnInit {
+export class PagingComponent implements OnInit, OnDestroy {
 
+  subscription: Subscription;
   currentPage = 1;
   totalPages: number;
 
@@ -25,8 +27,15 @@ export class PagingComponent implements OnInit {
 
   async ngOnInit() {
     const allPlayersCount = await this.appService.getAllPlayersCount();
-    const temp = allPlayersCount % pageSize;
-    this.totalPages = temp === 0 ? allPlayersCount / pageSize : allPlayersCount / pageSize + 1;
+    this.totalPages = this.numberOfPages(allPlayersCount);
+
+    this.subscription = this.appService.playersFiltered
+      .subscribe((total: number) => this.totalPages = this.numberOfPages(total));
+  }
+
+  private numberOfPages(itemsCount: number) {
+    const temp = itemsCount % pageSize;
+    return temp === 0 ? itemsCount / pageSize : Math.floor(itemsCount / pageSize) + 1;
   }
 
   changePage = (pagingControlSelected: string) => this.updateListComponent(pagingControlSelected);
@@ -48,5 +57,9 @@ export class PagingComponent implements OnInit {
     }
     console.log(`PagingComponent - loading ${this.currentPage}.page of players`);
     this.appService.loadPageOfPlayers(this.currentPage);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
