@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppService } from 'src/app/app.service';
 import { Player } from 'src/app/models/player';
 import { Subscription } from 'rxjs';
+import { ListStateService } from 'src/app/list-state.service';
 
 @Component({
   selector: 'app-item-list',
@@ -13,13 +13,14 @@ export class ItemListComponent implements OnInit, OnDestroy {
   items: Array<Player>;
   subscription: Subscription;
 
-  constructor(private appService: AppService) {
-    this.appService = appService;
+  constructor(private listStateService: ListStateService) {
+    this.listStateService = listStateService;
   }
 
   async ngOnInit() {
-    this.items = await this.appService.getPageOfPlayers(1);
-    this.subscription = this.appService.loadedPlayersChanged
+    console.log('itemListComponent - ngOnInit()');
+    this.items = await this.listStateService.getPageOfPlayers(1);
+    this.subscription = this.listStateService.loadedItemsChanged
       .subscribe((items: Player[]) => {
         console.log(`ItemListComponent, OnInitloadedPlayersChanged subscriber invoked,
         setting displayed page of players`);

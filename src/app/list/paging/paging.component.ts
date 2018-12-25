@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppService } from 'src/app/app.service';
 import { Subscription } from 'rxjs';
+import { ListStateService } from 'src/app/list-state.service';
 
 enum PagingControls {
   First = 'f',
@@ -21,15 +21,16 @@ export class PagingComponent implements OnInit, OnDestroy {
   currentPage = 1;
   totalPages: number;
 
-  constructor(private appService: AppService) {
-    this.appService = appService;
+  constructor(private listStateService: ListStateService) {
+    this.listStateService = listStateService;
   }
 
   async ngOnInit() {
-    const allPlayersCount = await this.appService.getAllPlayersCount();
+    console.log('pagingComponent - ngOnInit()');
+    const allPlayersCount = await this.listStateService.getAllPlayersCount();
     this.totalPages = this.numberOfPages(allPlayersCount);
 
-    this.subscription = this.appService.playersFiltered
+    this.subscription = this.listStateService.itemsFiltered
       .subscribe((total: number) => this.totalPages = this.numberOfPages(total));
   }
 
@@ -56,7 +57,7 @@ export class PagingComponent implements OnInit, OnDestroy {
         break;
     }
     console.log(`PagingComponent - loading ${this.currentPage}.page of players`);
-    this.appService.loadPageOfPlayers(this.currentPage);
+    this.listStateService.ApplyPage(this.currentPage);
   }
 
   ngOnDestroy() {

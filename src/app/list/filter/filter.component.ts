@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { AppService } from 'src/app/app.service';
-import { FormGroup, FormBuilder, FormControl, NgForm } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { ListStateService } from 'src/app/list-state.service';
 
 @Component({
   selector: 'app-filter',
@@ -29,10 +29,11 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   };
 
-  constructor(private appService: AppService, private formBuilder: FormBuilder) {
+  constructor(private listStateService: ListStateService, private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
+    console.log('filterComponent - ngOnInit()');
     this.initForm();
   }
 
@@ -67,7 +68,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     };
 
     console.log(`applying this filter: `, filterValues);
-    this.appService.loadFilteredPlayers(filterValues);
+    this.listStateService.updateAndApplyFilter(filterValues);
   }
 
   ngOnDestroy(): void {
