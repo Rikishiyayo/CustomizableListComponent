@@ -3,9 +3,9 @@
     <div class="col">
       <div class="form-group">
         <span>Position</span>
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush" formArrayName="position">
           <li *ngFor="let position of filterForm.controls.position.controls; let i = index" class="list-group-item">
-            <label formArrayName="position">
+            <label>
               <input type="checkbox" [formControlName]="i" (change)="applyFilter()">
               {{filter.filterItems.position.values[i]}}
             </label>
