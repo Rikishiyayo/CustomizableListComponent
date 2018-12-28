@@ -63,8 +63,8 @@ export class AppService {
 
   private meetsFilterCriteria(player: Player, filter: Filter): boolean {
     return filter.position.includes(player.position)
-      && player.age >= filter.age.minAge
-      && player.age <= filter.age.maxAge;
+      && player.age >= filter.age.minage
+      && player.age <= filter.age.maxage;
   }
 
   // private helper methods

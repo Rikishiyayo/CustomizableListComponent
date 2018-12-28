@@ -14,9 +14,15 @@ export class ListStateService {
 
   private items: Array<Player>;
   private filter: Filter;
+  private totalFilteredItems: number;
+  private currentPage: number;
 
   constructor(private appService: AppService) {
     this.initListState();
+  }
+
+  async getPageOfPlayers(page: number, items: Array<Player> = null): Promise<Array<Player>> {
+    return this.appService.getPageOfPlayers(page, items);
   }
 
   async getAllPlayersCount() {
@@ -25,16 +31,22 @@ export class ListStateService {
 
   async updateAndApplyFilter(filter: any) {
     this.filter = filter;
+    this.currentPage = 1;
     await this.getFilteredListOfItems();
 
     this.loadedItemsChanged.next(this.items);
-    this.itemsFiltered.next(100); // this info must come from webApi call
+    this.itemsFiltered.next(this.totalFilteredItems); // this info must come from webApi call
   }
 
   async ApplyPage(page: number) {
-    this.items = await this.getPageOfPlayers(page);
+    this.currentPage = page;
+    await this.getFilteredListOfItems();
 
     this.loadedItemsChanged.next(this.items);
+  }
+
+  private async initListState() {
+    this.items = await this.appService.getPageOfPlayers(1);
   }
 
   private async getFilteredListOfItems() {
@@ -45,14 +57,8 @@ export class ListStateService {
       filtered players and emitting an event`);
 
     const filteredListOfItems = await this.appService.getFilteredListOfPlayers(this.filter);
-    this.items = await this.getPageOfPlayers(1, filteredListOfItems);
-  }
 
-  async getPageOfPlayers(page: number, items: Array<Player> = null): Promise<Array<Player>> {
-    return this.appService.getPageOfPlayers(page, items);
-  }
-
-  private async initListState() {
-    this.items = await this.appService.getPageOfPlayers(1);
+    this.totalFilteredItems = filteredListOfItems.length;
+    this.items = await this.getPageOfPlayers(this.currentPage, filteredListOfItems);
   }
 }

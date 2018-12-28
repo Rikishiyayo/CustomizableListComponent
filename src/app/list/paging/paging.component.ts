@@ -28,13 +28,16 @@ export class PagingComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     console.log('pagingComponent - ngOnInit()');
     const allPlayersCount = await this.listStateService.getAllPlayersCount();
-    this.totalPages = this.numberOfPages(allPlayersCount);
+    this.totalPages = this.calculateNumberOfPages(allPlayersCount);
 
     this.subscription = this.listStateService.itemsFiltered
-      .subscribe((total: number) => this.totalPages = this.numberOfPages(total));
+      .subscribe((total: number) => {
+        this.totalPages = this.calculateNumberOfPages(total);
+        this.currentPage = 1;
+      });
   }
 
-  private numberOfPages(itemsCount: number) {
+  private calculateNumberOfPages(itemsCount: number) {
     const temp = itemsCount % pageSize;
     return temp === 0 ? itemsCount / pageSize : Math.floor(itemsCount / pageSize) + 1;
   }

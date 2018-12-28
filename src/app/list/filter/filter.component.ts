@@ -13,6 +13,7 @@ import { FilterItem, FilterItemType, CheckBoxFilter, RangeFilter } from 'src/app
 export class FilterComponent implements OnInit, OnDestroy {
   filterFormSubscriptions: Subscription[] = [];
   filterForm: FormGroup;
+  rangeFilter: RangeFilter;
 
   constructor(private appService: AppService,
     private listStateService: ListStateService,
@@ -24,12 +25,12 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.initForm();
   }
 
-  private initForm() {
+  initForm() {
     const filterDefinition: Array<FilterItem> = this.appService.getFilterDefinition();
     this.filterForm = this.formBuilder.group(this.assembleForm(filterDefinition));
   }
 
-  private assembleForm(filterDefinition: Array<FilterItem>): any {
+  assembleForm(filterDefinition: Array<FilterItem>): any {
     const formGroup = {};
 
     for (const filterItem of filterDefinition) {
@@ -46,6 +47,7 @@ export class FilterComponent implements OnInit, OnDestroy {
           break;
         case FilterItemType.range:
           const rangeFilter = filterItem as RangeFilter;
+          this.rangeFilter = rangeFilter;
           formGroup[rangeFilter.title] = this.formBuilder.group({
             ['min' + rangeFilter.title]: [rangeFilter.minValue],
             ['max' + rangeFilter.title]: [rangeFilter.maxValue],
@@ -57,26 +59,31 @@ export class FilterComponent implements OnInit, OnDestroy {
     return formGroup;
   }
 
+  getArrayOfControls = (controls: any) => Object.keys(controls);
+
+  //////////////////////////////////////////////////////////
+  dumpFormValue = () => console.log(this.filterForm.value);
+  //////////////////////////////////////////////////////////
+
   applyFilter() {
-    // select positions that were checked(true value in formArray)
-    // let selectedPositions = this.filterForm.value.position
-    //   .map((v, i) => v ? this.filter.filterItems.position.values[i] : null)
-    //   .filter(v => v !== null);
+    // select positions that were checked(value[0] is position,
+    // value[1] is boolean[true if checkbox was checked, false if it was not)]
+    let selectedPositions = Object.entries(this.filterForm.value.position)
+      .map(value => value[1] ? value[0] : null).filter(value => value);
 
-    // // if no positions were selected, assign all positions to the variable in order to
-    // // not filter by position
-    // selectedPositions =
-    //   (Array.isArray(selectedPositions) && selectedPositions.length)
-    //     ? selectedPositions
-    //     : this.filter.filterItems.position.values;
+    // if no positions were selected, assign all positions to the variable in order to
+    // not filter by position
+    selectedPositions = (Array.isArray(selectedPositions) && selectedPositions.length)
+      ? selectedPositions
+      : Object.entries(this.filterForm.value.position).map(value => value[0]);
 
-    // const filterValues = {
-    //   position: selectedPositions,
-    //   age: this.filterForm.value.age
-    // };
+    const filterValues = {
+      position: selectedPositions,
+      age: this.filterForm.value.age
+    };
 
-    // console.log(`applying this filter: `, filterValues);
-    // this.listStateService.updateAndApplyFilter(filterValues);
+    console.log(`applying this filter: `, filterValues);
+    this.listStateService.updateAndApplyFilter(filterValues);
   }
 
   ngOnDestroy(): void {

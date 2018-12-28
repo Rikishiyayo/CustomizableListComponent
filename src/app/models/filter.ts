@@ -4,6 +4,6 @@ export class Filter {
 }
 
 export class Age {
-    minAge: number;
-    maxAge: number;
+    minage: number;
+    maxage: number;
 }
