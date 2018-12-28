@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { players } from './players';
 import { Player } from './models/player';
-import { Subject } from 'rxjs';
 import { Filter } from './models/filter';
+import { FilterItem } from './models/listState';
 
 const pageSize = 15;
 
@@ -10,15 +10,31 @@ const pageSize = 15;
   providedIn: 'root'
 })
 export class AppService {
-
-  // Global observables of the component
-  // loadedPlayersChanged = new Subject<Player[]>();
-  // playersFiltered = new Subject<number>();
-
   private players: Array<Player>;
 
   constructor() {
     this.players = players;
+  }
+
+  getFilterDefinition(): Array<FilterItem> {
+    const filters = [
+      {
+        type: 0,
+        title: 'position',
+        values: ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'],
+        selectedValues: []
+      },
+      {
+        type: 2,
+        title: 'age',
+        minValue: 16,
+        maxValue: 40,
+        selectedMinValue: undefined,
+        selectedMaxValue: undefined
+      }
+    ];
+
+    return filters;
   }
 
   async getAllPlayersCount() {
@@ -50,25 +66,6 @@ export class AppService {
       && player.age >= filter.age.minAge
       && player.age <= filter.age.maxAge;
   }
-
-  // // Event emmiting methods
-  // async loadPageOfPlayers(page: number) {
-  //   console.log(`AppService - loadPageOfPlayers() invoked, getting ${page}.page
-  //   of players and emitting an event`);
-  //   const chunkOfPlayers = await this.getPageOfPlayers(page);
-  //   this.loadedPlayersChanged.next(chunkOfPlayers);
-  // }
-
-  // async loadFilteredPlayers(filter: Filter) {
-  //   console.log(`AppService - loadFilteredPlayers() invoked, getting
-  //   of filtered players and emitting an event`);
-
-  //   const filteredListOfPlayers = await this.getFilteredListOfPlayers(filter);
-  //   const pageOfFilteredListOfPlayers = await this.getPageOfPlayers(1, filteredListOfPlayers);
-
-  //   this.loadedPlayersChanged.next(pageOfFilteredListOfPlayers);
-  //   this.playersFiltered.next(filteredListOfPlayers.length);
-  // }
 
   // private helper methods
   private getAllPlayersPromise(): Promise<Player[]> {

@@ -1,58 +1,45 @@
 import { Player } from './player';
 
 export enum FilterItemType {
-    checkbox = 'checkbox',
-    radio = 'radio',
-    range = 'range',
-    dropdown = 'dropdown'
+    checkbox,
+    radio,
+    range,
+    dropdown
 }
 
-export class FilterItem {
-    constructor(public type: FilterItemType, public title: string) {
-        this.type = type;
-        this.title = title;
-    }
+export interface FilterItem {
+    type: FilterItemType;
+    title: string;
 }
 
-export class CheckBoxFilter extends FilterItem {
-    selectedValues: Array<string> = [];
-
-    constructor(title: string, public values: Array<string>) {
-        super(FilterItemType.checkbox, title);
-        this.values = values;
-    }
+export interface CheckBoxFilter extends FilterItem {
+    values: Array<string>;
+    selectedValues: Array<string>;
 }
 
-export class RangeFilter extends FilterItem {
-    constructor(title: string,
-        public minValue: number, public maxValue: number,
-        public selectedMinValue: number, public selectedMaxValue: number) {
-
-        super(FilterItemType.range, title);
-    }
+export interface RangeFilter extends FilterItem {
+    minValue: number;
+    maxValue: number;
+    selectedMinValue: number;
+    selectedMaxValue: number;
 }
 
-export class RadioFilter extends FilterItem {
-    selectedValue = '';
-
-    constructor(title: string, public values: Array<string>) {
-        super(FilterItemType.radio, title);
-    }
+export interface RadioFilter extends FilterItem {
+    values: Array<string>;
+    selectedValue: string;
 }
 
-export class DropdownFilter extends FilterItem {
-    selectedValue = '';
-
-    constructor(title: string, public values: Array<string>) {
-        super(FilterItemType.dropdown, title);
-    }
+export interface DropdownFilter extends FilterItem {
+    values: Array<string>;
+    selectedValue: string;
 }
 
-export class Pager {
-    constructor(public totalPages: number, public currentPage: number) {}
+export interface Pager {
+    totalPages: number;
+    currentPage: number;
 }
 
-export class ListState {
+export interface ListState {
     items: Array<Player>;
     filters: Array<FilterItem>;
     pager: Pager;
