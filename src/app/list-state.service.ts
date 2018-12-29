@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AppService } from './app.service';
 import { Player } from './models/player';
-import { Filter } from './models/filter';
+import { FilterItem } from './models/listState';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ListStateService {
   itemsFiltered = new Subject<number>();
 
   private items: Array<Player>;
-  private filter: Filter;
+  private filter: FilterItem;
   private totalFilteredItems: number;
   private currentPage: number;
 

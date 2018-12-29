@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { players } from './players';
 import { Player } from './models/player';
-import { Filter } from './models/filter';
 import { FilterItem } from './models/listState';
 
 const pageSize = 15;
@@ -52,7 +51,7 @@ export class AppService {
     return allPlayers.slice((page - 1) * pageSize, page * pageSize);
   }
 
-  async getFilteredListOfPlayers(filter: Filter): Promise<Player[]> {
+  async getFilteredListOfPlayers(filter: any): Promise<Player[]> {
     const allPlayers = await this.getAllPlayersPromise();
 
     const filteredPlayers = allPlayers.filter((value) =>
@@ -61,7 +60,7 @@ export class AppService {
     return filteredPlayers;
   }
 
-  private meetsFilterCriteria(player: Player, filter: Filter): boolean {
+  private meetsFilterCriteria(player: Player, filter: any): boolean {
     return filter.position.includes(player.position)
       && player.age >= filter.age.minage
       && player.age <= filter.age.maxage;
