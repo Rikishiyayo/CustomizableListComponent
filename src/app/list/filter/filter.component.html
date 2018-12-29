@@ -1,48 +1,14 @@
 <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
   <div class="row">
-    <div class="col">
-      <!-- <div class="form-group" formGroupName="position">
-        <span>Position</span>
-        <ul class="list-group list-group-flush">
-          <li
-            *ngFor="let position of getArrayOfControls(filterForm.controls.position.controls)"
-            class="list-group-item">
-            <label>
-              <input type="checkbox" [formControlName]="position" (change)="applyFilter()">
-              {{position}}
-            </label>
-          </li>
-        </ul>
-      </div> -->
-      <app-checkbox-filter
-        [filterProperties]="filterDefinition[0]"
-        [formGroup]="filterForm"
-        (filterApplied)="applyFilter()">
-      </app-checkbox-filter>
-      <app-range-filter
-        [filterProperties]="filterDefinition[1]"
-        [formGroup]="filterForm"
-        (filterApplied)="applyFilter()">
-      </app-range-filter>
-      <!-- <div formGroupName="age">
-        <span>Age</span>
-        <div class="form-group row">
-          <div class="col-9">
-            <input #minage type="range" formControlName="minage"
-              class="form-control" (change)="applyFilter()"
-              [min]="rangeFilter.minValue" [max]="rangeFilter.maxValue">
-          </div>
-          <div class="col-3">{{minage.value}}</div>
-        </div>
-        <div class="form-group row">
-          <div class="col-9">
-            <input #maxage type="range" formControlName="maxage"
-              class="form-control" (change)="applyFilter()"
-              [min]="rangeFilter.minValue" [max]="rangeFilter.maxValue">
-          </div>
-          <div class="col-3">{{maxage.value}}</div>
-        </div>
-      </div> -->
+    <div class="col-12" *ngFor="let filterItem of filterDefinition">
+      <div [ngSwitch]=filterItem.type>
+        <app-checkbox-filter *ngSwitchCase="0" [filterProperties]="filterDefinition[0]"
+          [formGroup]="filterForm" (filterApplied)="applyFilter()">
+        </app-checkbox-filter>
+        <app-range-filter *ngSwitchCase="2" [filterProperties]="filterDefinition[1]"
+          [formGroup]="filterForm" (filterApplied)="applyFilter()">
+        </app-range-filter>
+      </div>
     </div>
   </div>
 </form>

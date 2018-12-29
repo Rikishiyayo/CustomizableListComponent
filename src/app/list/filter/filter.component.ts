@@ -10,10 +10,8 @@ import { FilterItem, FilterItemType, CheckBoxFilter, RangeFilter } from 'src/app
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.css']
 })
-export class FilterComponent implements OnInit, OnDestroy {
-  filterFormSubscriptions: Subscription[] = [];
+export class FilterComponent implements OnInit {
   filterForm: FormGroup;
-  rangeFilter: RangeFilter;
   filterDefinition: FilterItem[];
 
   constructor(private appService: AppService,
@@ -48,7 +46,6 @@ export class FilterComponent implements OnInit, OnDestroy {
           break;
         case FilterItemType.range:
           const rangeFilter = filterItem as RangeFilter;
-          this.rangeFilter = rangeFilter;
           formGroup[rangeFilter.title] = this.formBuilder.group({
             ['min' + rangeFilter.title]: [rangeFilter.minValue],
             ['max' + rangeFilter.title]: [rangeFilter.maxValue],
@@ -59,8 +56,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     return formGroup;
   }
-
-  getArrayOfControls = (controls: any) => Object.keys(controls);
 
   //////////////////////////////////////////////////////////
   dumpFormValue = () => console.log(this.filterForm.value);
@@ -86,16 +81,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     console.log(`applying this filter: `, filterValues);
     this.listStateService.updateAndApplyFilter(filterValues);
   }
-
-  ngOnDestroy(): void {
-    for (const subscription of this.filterFormSubscriptions) {
-      subscription.unsubscribe();
-    }
-  }
 }
 
-// const checkboxFilter = filterItem as CheckBoxFilter;
-          // formGroup[checkboxFilter.title] = this.formBuilder.array(
-          //   checkboxFilter.values.map(() => this.formBuilder.control(false))
-          // );
 
