@@ -8,6 +8,9 @@ import { ItemListComponent } from './list/item-list/item-list.component';
 import { PositionPipe } from './position.pipe';
 import { PagingComponent } from './list/paging/paging.component';
 import { FilterComponent } from './list/filter/filter.component';
+import { CheckboxFilterComponent } from './list/filter/filterItems/checkbox-filter/checkbox-filter.component';
+import { RangeFilterComponent } from './list/filter/filterItems/range-filter/range-filter.component';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +19,9 @@ import { FilterComponent } from './list/filter/filter.component';
     ItemListComponent,
     PositionPipe,
     PagingComponent,
-    FilterComponent
+    FilterComponent,
+    CheckboxFilterComponent,
+    RangeFilterComponent
   ],
   imports: [
     BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule

@@ -1,0 +1,13 @@
+<div [formGroup]="formGroup">
+  <div class="form-group" [formGroupName]="filterProperties.title">
+    <span>{{filterProperties.title}}</span>
+    <ul class="list-group list-group-flush">
+      <li *ngFor="let checkboxItem of filterProperties.values" class="list-group-item">
+        <label>
+          <input type="checkbox" [formControlName]="checkboxItem" (change)="applyFilter()">
+          {{checkboxItem}}
+        </label>
+      </li>
+    </ul>
+  </div>
+</div>

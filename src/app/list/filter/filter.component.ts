@@ -14,6 +14,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   filterFormSubscriptions: Subscription[] = [];
   filterForm: FormGroup;
   rangeFilter: RangeFilter;
+  filterDefinition: FilterItem[];
 
   constructor(private appService: AppService,
     private listStateService: ListStateService,
@@ -26,8 +27,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    const filterDefinition: Array<FilterItem> = this.appService.getFilterDefinition();
-    this.filterForm = this.formBuilder.group(this.assembleForm(filterDefinition));
+    this.filterDefinition = this.appService.getFilterDefinition();
+    this.filterForm = this.formBuilder.group(this.assembleForm(this.filterDefinition));
   }
 
   assembleForm(filterDefinition: Array<FilterItem>): any {
