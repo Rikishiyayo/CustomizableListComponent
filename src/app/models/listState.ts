@@ -1,5 +1,3 @@
-import { Player } from './player';
-
 export enum FilterItemType {
     checkbox,
     radio,
@@ -40,7 +38,7 @@ export interface Pager {
 }
 
 export interface ListState {
-    items: Array<Player>;
+    items: Array<any>;
     filters: Array<FilterItem>;
     pager: Pager;
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { ListStateService } from 'src/app/list-state.service';
 import { AppService } from 'src/app/app.service';
 import { FilterItem, FilterItemType, CheckBoxFilter, RangeFilter } from 'src/app/models/listState';

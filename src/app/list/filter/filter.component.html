@@ -1,14 +1,14 @@
 <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
   <div class="row">
     <div class="col-12" *ngFor="let filterItem of filterDefinition">
-      <div [ngSwitch]=filterItem.type>
+      <ng-container [ngSwitch]=filterItem.type>
         <app-checkbox-filter *ngSwitchCase="0" [filterProperties]="filterItem"
           [formGroup]="filterForm" (filterApplied)="applyFilter()">
         </app-checkbox-filter>
         <app-range-filter *ngSwitchCase="2" [filterProperties]="filterItem"
           [formGroup]="filterForm" (filterApplied)="applyFilter()">
         </app-range-filter>
-      </div>
+      </ng-container>
     </div>
   </div>
 </form>
