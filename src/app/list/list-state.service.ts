@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AppService } from './app.service';
+import { AppService } from '../app.service';
 import { Player } from './models/player';
 import { FilterItem } from './models/listState';
 

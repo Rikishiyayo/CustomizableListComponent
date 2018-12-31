@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CheckBoxFilter } from 'src/app/models/listState';
+import { CheckBoxFilter } from 'src/app/list/models/listState';
 import { FormGroup } from '@angular/forms';
 
 @Component({

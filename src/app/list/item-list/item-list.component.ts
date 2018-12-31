@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Player } from 'src/app/models/player';
+import { Player } from 'src/app/list/models/player';
 import { Subscription } from 'rxjs';
-import { ListStateService } from 'src/app/list-state.service';
+import { ListStateService } from 'src/app/list/list-state.service';
 
 @Component({
   selector: 'app-item-list',

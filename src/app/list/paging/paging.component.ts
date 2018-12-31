@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ListStateService } from 'src/app/list-state.service';
+import { ListStateService } from 'src/app/list/list-state.service';
 
 enum PagingControls {
   First = 'f',

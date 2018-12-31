@@ -1,4 +1,4 @@
-import { Player } from './models/player';
+import { Player } from './list/models/player';
 
 export const players: Array<Player> = [
     {

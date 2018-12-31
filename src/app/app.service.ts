@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { players } from './players';
-import { Player } from './models/player';
-import { FilterItem } from './models/listState';
+import { Player } from './list/models/player';
+import { FilterItem } from './list/models/listState';
 
 const pageSize = 15;
 
@@ -72,7 +72,7 @@ export class AppService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(this.players);
-      }, 200);
+      }, 2200);
     });
   }
 }

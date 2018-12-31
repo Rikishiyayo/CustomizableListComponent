@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { RangeFilter } from 'src/app/models/listState';
+import { RangeFilter } from 'src/app/list/models/listState';
 import { FormGroup } from '@angular/forms';
 
 @Component({
