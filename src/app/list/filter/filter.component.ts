@@ -26,6 +26,7 @@ export class FilterComponent implements OnInit {
   initForm() {
     this.filterDefinition = this.appService.getFilterDefinition();
     this.filterForm = this.formBuilder.group(this.assembleForm(this.filterDefinition));
+    this.listStateService.initFilter(this.getFilter());
   }
 
   assembleForm(filterDefinition: Array<FilterItem>): any {
@@ -61,6 +62,12 @@ export class FilterComponent implements OnInit {
   //////////////////////////////////////////////////////////
 
   applyFilter() {
+    const filter = this.getFilter();
+    console.log(`applying this filter: `, filter);
+    this.listStateService.updateAndApplyFilter(filter);
+  }
+
+  getSelectedCheckboxValues() {
     // select positions that were checked(value[0] is position,
     // value[1] is boolean[true if checkbox was checked, false if it was not)]
     let selectedPositions = Object.entries(this.filterForm.value.position)
@@ -72,13 +79,14 @@ export class FilterComponent implements OnInit {
       ? selectedPositions
       : Object.entries(this.filterForm.value.position).map(value => value[0]);
 
-    const filterValues = {
-      position: selectedPositions,
+    return selectedPositions;
+  }
+
+  getFilter() {
+    return {
+      position: this.getSelectedCheckboxValues(),
       age: this.filterForm.value.age
     };
-
-    console.log(`applying this filter: `, filterValues);
-    this.listStateService.updateAndApplyFilter(filterValues);
   }
 }
 

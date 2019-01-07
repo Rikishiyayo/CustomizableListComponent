@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, TemplateRef } from '@angular/core';
 import { Player } from 'src/app/list/models/player';
 import { Subscription } from 'rxjs';
 import { ListStateService } from 'src/app/list/list-state.service';
@@ -10,8 +10,10 @@ import { ListStateService } from 'src/app/list/list-state.service';
 })
 export class ItemListComponent implements OnInit, OnDestroy {
 
+  templateContext: {};
   items: Array<Player>;
   subscription: Subscription;
+  @Input() itemListTemplate: TemplateRef<any>;
 
   constructor(private listStateService: ListStateService) {
     this.listStateService = listStateService;
@@ -24,8 +26,10 @@ export class ItemListComponent implements OnInit, OnDestroy {
       .subscribe((items: Player[]) => {
         console.log(`ItemListComponent, OnInitloadedPlayersChanged subscriber invoked,
         setting displayed page of players`);
-        this.items = items;
+        this.templateContext['$implicit'] = items;
       });
+
+    this.templateContext = { $implicit: this.items };
   }
 
   ngOnDestroy() {

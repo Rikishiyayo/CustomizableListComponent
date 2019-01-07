@@ -1,5 +1,13 @@
-<app-list></app-list>
-<ng-template #playerList>
-    <h2>Player List template</h2>
+<app-list [itemListTemplate]="playerList"></app-list>
+<ng-template #playerList let-items>
+  <h2>Item List user template</h2>
+  <div id="itemList">
+    <div class="row" id="listItem" *ngFor="let item of items">
+      <div class="col-1">{{item.position | position}}</div>
+      <div class="col-5">{{item.name}}</div>
+      <div class="col-1">{{item.age}}</div>
+      <div class="col-3">{{item.club}}</div>
+      <div class="col-2">{{item.season}}</div>
+    </div>
+  </div>
 </ng-template>
-

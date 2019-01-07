@@ -45,6 +45,8 @@ export class ListStateService {
     this.loadedItemsChanged.next(this.items);
   }
 
+  public initFilter = (filter: any) => this.filter = filter;
+  
   private async initListState() {
     this.items = await this.appService.getPageOfPlayers(1);
   }

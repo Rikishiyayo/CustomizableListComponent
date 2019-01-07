@@ -72,7 +72,7 @@ export class AppService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(this.players);
-      }, 2200);
+      }, 300);
     });
   }
 }
