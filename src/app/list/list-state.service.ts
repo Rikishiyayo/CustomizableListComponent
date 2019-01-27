@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AppService } from '../app.service';
 import { Player } from './models/player';
-import { FilterItem } from './models/listState';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class ListStateService {
   itemsFiltered = new Subject<number>();
 
   private items: Array<Player>;
-  private filter: FilterItem;
+  private filter: any;
   private totalFilteredItems: number;
   private currentPage: number;
 
@@ -21,15 +20,17 @@ export class ListStateService {
     this.initListState();
   }
 
-  async getPageOfPlayers(page: number, items: Array<Player> = null): Promise<Array<Player>> {
+  public async getPageOfPlayers(page: number, items: Array<Player> = null): Promise<Array<Player>> {
     return this.appService.getPageOfPlayers(page, items);
   }
 
-  async getAllPlayersCount() {
+  public async getAllPlayersCount(): Promise<number> {
     return await this.appService.getAllPlayersCount();
   }
 
-  async updateAndApplyFilter(filter: any) {
+  public async updateAndApplyFilter(filter: any) {
+    console.log('ListStateService - updateAndApplyFilter()');
+
     this.filter = filter;
     this.currentPage = 1;
     await this.getFilteredListOfItems();
@@ -38,7 +39,9 @@ export class ListStateService {
     this.itemsFiltered.next(this.totalFilteredItems); // this info must come from webApi call
   }
 
-  async ApplyPage(page: number) {
+  public async applyPage(page: number) {
+    console.log('ListStateService - applyPage()');
+
     this.currentPage = page;
     await this.getFilteredListOfItems();
 
@@ -46,7 +49,7 @@ export class ListStateService {
   }
 
   public initFilter = (filter: any) => this.filter = filter;
-  
+
   private async initListState() {
     this.items = await this.appService.getPageOfPlayers(1);
   }
@@ -55,7 +58,7 @@ export class ListStateService {
     // proly does not conform with single responsibility principle
     // this method should get the data and not update state, move state updating to
     // applyFilter method or a different method
-    console.log(`FilterStateService - getFilteredListOfItems() invoked, getting
+    console.log(`ListStateService - getFilteredListOfItems() invoked, getting
       filtered players and emitting an event`);
 
     const filteredListOfItems = await this.appService.getFilteredListOfPlayers(this.filter);

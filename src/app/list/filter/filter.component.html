@@ -5,11 +5,13 @@
         <app-checkbox-filter *ngSwitchCase="0" [filterProperties]="filterItem"
           [formGroup]="filterForm" (filterApplied)="applyFilter()">
         </app-checkbox-filter>
-        <app-range-filter *ngSwitchCase="2" [filterProperties]="filterItem"
+        <app-range-filter *ngSwitchCase="3" [filterProperties]="filterItem"
           [formGroup]="filterForm" (filterApplied)="applyFilter()">
         </app-range-filter>
       </ng-container>
     </div>
   </div>
 </form>
-<button (click)="dumpFormValue()">dump form value</button>
+<button (click)="dumpFormValue()">dump values of form controls</button>
+<button (click)="dumpForm()">dump form value</button>
+

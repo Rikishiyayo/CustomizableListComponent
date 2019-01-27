@@ -1,43 +1,44 @@
 export enum FilterItemType {
     checkbox,
     radio,
-    range,
-    dropdown
+    dropdown,
+    range
 }
 
-export interface FilterItem {
+export class FilterItemTypeAndTitle {
     type: FilterItemType;
     title: string;
 }
 
-export interface CheckBoxFilter extends FilterItem {
+export class CheckBoxFilter extends FilterItemTypeAndTitle {
     values: Array<string>;
     selectedValues: Array<string>;
 }
 
-export interface RangeFilter extends FilterItem {
+export class RangeFilter extends FilterItemTypeAndTitle {
     minValue: number;
     maxValue: number;
-    selectedMinValue: number;
-    selectedMaxValue: number;
 }
 
-export interface RadioFilter extends FilterItem {
+export class RadioFilter extends FilterItemTypeAndTitle {
     values: Array<string>;
     selectedValue: string;
 }
 
-export interface DropdownFilter extends FilterItem {
+export class DropdownFilter extends FilterItemTypeAndTitle {
     values: Array<string>;
     selectedValue: string;
 }
 
-export interface Pager {
+export type FilterItem = CheckBoxFilter | RangeFilter | RadioFilter | DropdownFilter;
+
+export class Pager {
     totalPages: number;
     currentPage: number;
 }
 
-export interface ListState {
+
+export class ListState {
     items: Array<any>;
     filters: Array<FilterItem>;
     pager: Pager;

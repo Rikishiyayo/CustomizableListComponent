@@ -9,13 +9,13 @@ const pageSize = 15;
   providedIn: 'root'
 })
 export class AppService {
-  private players: Array<Player>;
+  private players: Player[];
 
   constructor() {
     this.players = players;
   }
 
-  getFilterDefinition(): Array<FilterItem> {
+  public getFilterDefinition(): FilterItem[] {
     const filters = [
       {
         type: 0,
@@ -24,34 +24,32 @@ export class AppService {
         selectedValues: []
       },
       {
-        type: 2,
+        type: 3,
         title: 'age',
         minValue: 16,
-        maxValue: 40,
-        selectedMinValue: undefined,
-        selectedMaxValue: undefined
+        maxValue: 40
       }
     ];
 
     return filters;
   }
 
-  async getAllPlayersCount() {
+  public async getAllPlayersCount() {
     const allPlayers = await this.getAllPlayersPromise();
     return allPlayers.length;
   }
 
-  async getAllPlayers() {
+  public async getAllPlayers() {
     const allPlayers = await this.getAllPlayersPromise();
     return allPlayers.slice();
   }
 
-  async getPageOfPlayers(page: number, listOfPlayers: Player[] = null): Promise<Player[]> {
+  public async getPageOfPlayers(page: number, listOfPlayers: Player[] = null): Promise<Player[]> {
     const allPlayers = listOfPlayers ? listOfPlayers : await this.getAllPlayersPromise();
     return allPlayers.slice((page - 1) * pageSize, page * pageSize);
   }
 
-  async getFilteredListOfPlayers(filter: any): Promise<Player[]> {
+  public async getFilteredListOfPlayers(filter: any): Promise<Player[]> {
     const allPlayers = await this.getAllPlayersPromise();
 
     const filteredPlayers = allPlayers.filter((value) =>
@@ -60,19 +58,20 @@ export class AppService {
     return filteredPlayers;
   }
 
-  private meetsFilterCriteria(player: Player, filter: any): boolean {
-    return filter.position.includes(player.position)
-      && player.age >= filter.age.minage
-      && player.age <= filter.age.maxage;
+  private meetsFilterCriteria(player: Player, filter: any[]): boolean {
+    const pos = filter[0].position;
+    const age = filter[1].age;
+    return filter[0].position.includes(player.position)
+      && player.age >= filter[1].age.min
+      && player.age <= filter[1].age.max;
   }
 
-  // private helper methods
   private getAllPlayersPromise(): Promise<Player[]> {
     // tslint:disable-next-line:no-shadowed-variable
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(this.players);
-      }, 300);
+      }, 200);
     });
   }
 }

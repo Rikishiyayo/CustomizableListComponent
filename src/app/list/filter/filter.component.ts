@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ListStateService } from 'src/app/list/list-state.service';
 import { AppService } from 'src/app/app.service';
-import { FilterItem, FilterItemType, CheckBoxFilter, RangeFilter } from 'src/app/list/models/listState';
+import { FilterItemType, CheckBoxFilter, RangeFilter, FilterItem } from 'src/app/list/models/listState';
 
 @Component({
   selector: 'app-filter',
@@ -23,13 +23,14 @@ export class FilterComponent implements OnInit {
     this.initForm();
   }
 
-  initForm() {
+  initForm(): void {
     this.filterDefinition = this.appService.getFilterDefinition();
     this.filterForm = this.formBuilder.group(this.assembleForm(this.filterDefinition));
-    this.listStateService.initFilter(this.getFilter());
+    this.listStateService.initFilter(this.getFilterValues());
   }
 
-  assembleForm(filterDefinition: Array<FilterItem>): any {
+  assembleForm(filterDefinition: FilterItem[]): any {
+    console.log('filterComponent - assembleForm()');
     const formGroup = {};
 
     for (const filterItem of filterDefinition) {
@@ -47,8 +48,8 @@ export class FilterComponent implements OnInit {
         case FilterItemType.range:
           const rangeFilter = filterItem as RangeFilter;
           formGroup[rangeFilter.title] = this.formBuilder.group({
-            ['min' + rangeFilter.title]: [rangeFilter.minValue],
-            ['max' + rangeFilter.title]: [rangeFilter.maxValue],
+            'min': [rangeFilter.minValue],
+            'max': [rangeFilter.maxValue],
           });
           break;
       }
@@ -57,37 +58,57 @@ export class FilterComponent implements OnInit {
     return formGroup;
   }
 
-  //////////////////////////////////////////////////////////
-  dumpFormValue = () => console.log(this.filterForm.value);
-  //////////////////////////////////////////////////////////
-
-  applyFilter() {
-    const filter = this.getFilter();
-    console.log(`applying this filter: `, filter);
+  applyFilter(): void {
+    const filter = this.getFilterValues();
+    console.log(`filterComponent - applyFilter(): applying this filter: `, filter);
     this.listStateService.updateAndApplyFilter(filter);
   }
 
-  getSelectedCheckboxValues() {
+  getFilterValues(): any[] {
+    const getFilterValuesBasedOnFilterType = {
+      [FilterItemType.checkbox]: this.getCheckboxFilterValue,
+      [FilterItemType.radio]: this.getCheckboxFilterValue,
+      [FilterItemType.dropdown]: this.getCheckboxFilterValue,
+      [FilterItemType.range]: this.getRangeFilterValue
+    };
+    const filterValues = [];
+
+    for (const [filterName, filterValue] of Object.entries(this.filterForm.value)) {
+      // get type of filter
+      const filterType = this.filterDefinition
+        .find((value: FilterItem) => value.title === filterName).type;
+
+      // get filterValue based on filter type
+      const funcToGetFilterValues = getFilterValuesBasedOnFilterType[filterType];
+      filterValues.push({ [filterName]: funcToGetFilterValues(filterValue) });
+    }
+
+    return filterValues;
+  }
+
+  getRangeFilterValue(rangeFilterValue): { min: number, max: number } {
+    return { min: rangeFilterValue.min, max: rangeFilterValue.max };
+  }
+
+  getCheckboxFilterValue(checkboxFilterValue): string[] {
     // select positions that were checked(value[0] is position,
     // value[1] is boolean[true if checkbox was checked, false if it was not)]
-    let selectedPositions = Object.entries(this.filterForm.value.position)
+    let selectedCheckboxValues = Object.entries(checkboxFilterValue)
       .map(value => value[1] ? value[0] : null).filter(value => value);
 
     // if no positions were selected, assign all positions to the variable in order to
     // not filter by position
-    selectedPositions = (Array.isArray(selectedPositions) && selectedPositions.length)
-      ? selectedPositions
-      : Object.entries(this.filterForm.value.position).map(value => value[0]);
+    selectedCheckboxValues = (Array.isArray(selectedCheckboxValues) && selectedCheckboxValues.length)
+      ? selectedCheckboxValues
+      : Object.entries(checkboxFilterValue).map(value => value[0]);
 
-    return selectedPositions;
+    return selectedCheckboxValues;
   }
 
-  getFilter() {
-    return {
-      position: this.getSelectedCheckboxValues(),
-      age: this.filterForm.value.age
-    };
-  }
+  //////////////////////////////////////////////////////////
+  dumpFormValue = () => console.log(this.filterForm.value);
+  dumpForm = () => console.log(this.filterForm);
+  //////////////////////////////////////////////////////////
 }
 
 

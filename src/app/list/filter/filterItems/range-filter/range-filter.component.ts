@@ -18,8 +18,5 @@ export class RangeFilterComponent implements OnInit {
   ngOnInit() {
   }
 
-  getFormControlNameForMin = () => 'min' + this.filterProperties.title;
-  getFormControlNameForMax = () => 'max' + this.filterProperties.title;
-
   applyFilter = () => this.filterApplied.emit();
 }

@@ -21,11 +21,12 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     console.log('itemListComponent - ngOnInit()');
+
     this.items = await this.listStateService.getPageOfPlayers(1);
     this.subscription = this.listStateService.loadedItemsChanged
       .subscribe((items: Player[]) => {
-        console.log(`ItemListComponent, OnInitloadedPlayersChanged subscriber invoked,
-        setting displayed page of players`);
+        console.log(`ItemListComponent, loadedItemsChanged subscriber invoked,
+        updating templateContext with items to display`);
         this.templateContext['$implicit'] = items;
       });
 

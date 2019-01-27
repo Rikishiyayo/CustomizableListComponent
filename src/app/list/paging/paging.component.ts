@@ -37,14 +37,14 @@ export class PagingComponent implements OnInit, OnDestroy {
       });
   }
 
-  private calculateNumberOfPages(itemsCount: number) {
+  private calculateNumberOfPages(itemsCount: number): number {
     const temp = itemsCount % pageSize;
     return temp === 0 ? itemsCount / pageSize : Math.floor(itemsCount / pageSize) + 1;
   }
 
   changePage = (pagingControlSelected: string) => this.updateListComponent(pagingControlSelected);
 
-  private updateListComponent(pagingControlSelected: string) {
+  private updateListComponent(pagingControlSelected: string): void {
     switch (pagingControlSelected.toLowerCase()) {
       case PagingControls.First:
         this.currentPage = 1;
@@ -60,7 +60,7 @@ export class PagingComponent implements OnInit, OnDestroy {
         break;
     }
     console.log(`PagingComponent - loading ${this.currentPage}.page of players`);
-    this.listStateService.ApplyPage(this.currentPage);
+    this.listStateService.applyPage(this.currentPage);
   }
 
   ngOnDestroy() {
